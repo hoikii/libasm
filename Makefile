@@ -1,5 +1,5 @@
 NAME		= libasm.a
-SRCS		= ft_strlen.s
+SRCS		= ft_strlen.s ft_strcpy.s
 ASM			= nasm
 ASMFLAG		= -fmacho64
 CC			= gcc
@@ -29,4 +29,4 @@ re: fclean all
 
 test: all
 	$(CC) $(CLFAGS) -L. -lasm -o $(TESTNAME) main.c
-	./$(TESTNAME)
+	@./$(TESTNAME)
