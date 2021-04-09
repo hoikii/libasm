@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
 
 size_t	ft_strlen(const char *s);
 char	*ft_strcpy(char *dst, const char *src);
 int		ft_strcmp(const char *s1, const char *s2);
+ssize_t	ft_read(int fd, void *buf, size_t nbyte);
 
 void	test_ft_strlen(char *s)
 {
@@ -37,6 +41,66 @@ void	test_ft_strcmp(char *s1, char *s2)
 	return ;
 }
 
+void	test_ft_read_err1(int bytes)
+{
+	int		result;
+	char	buf[100];
+	char	buf_ori[100];
+
+	memset(buf, 0, sizeof(buf));
+	memset(buf_ori, 0, sizeof(buf_ori));
+	errno = 0;
+	result = read(-1, buf_ori, bytes);
+	printf("(result=%d)%s(errno=%d)\n", result, buf_ori, errno);
+	errno = 0;
+	result = ft_read(-1, buf, bytes);
+	printf("(result=%d)%s(errno=%d)\n", result, buf, errno);
+	return ;
+}
+
+void	test_ft_read_err2(int bytes)
+{
+	int		fd;
+	int		result;
+	char	buf[100];
+	char	buf_ori[100];
+
+	memset(buf, 0, sizeof(buf));
+	memset(buf_ori, 0, sizeof(buf_ori));
+	fd = open("main.c", O_RDONLY);
+	if (fd < 0)
+		return ;
+	errno = 0;
+	result = read(fd, NULL, bytes);
+	printf("(result=%d)%s(errno=%d)\n", result, buf_ori, errno);
+	errno = 0;
+	result = ft_read(fd, NULL, bytes);
+	printf("(result=%d)%s(errno=%d)\n", result, buf, errno);
+	return ;
+}
+
+void	test_ft_read(int bytes)
+{
+	int		fd;
+	int		result;
+	char	buf[100];
+	char	buf_ori[100];
+
+	memset(buf, 0, sizeof(buf));
+	memset(buf_ori, 0, sizeof(buf_ori));
+	fd = open("main.c", O_RDONLY);
+	if (fd < 0)
+		return ;
+	errno = 0;
+	result = read(fd, buf_ori, bytes);
+	printf("(result=%d)%s(errno=%d)\n", result, buf_ori, errno);
+	lseek(fd, 0, SEEK_SET);
+	errno = 0;
+	result = read(fd, buf, bytes);
+	printf("(result=%d)%s(errno=%d)\n", result, buf, errno);
+	close(fd);
+	return ;
+}
 int		main(void)
 {
 	printf(">>> Starting libasm test <<<\n");
@@ -60,5 +124,11 @@ int		main(void)
 	test_ft_strcmp("abc", "abx");
 	test_ft_strcmp("xyz", "xyz");
 
+	printf("\n===ft_read===\n");
+	test_ft_read_err1(5);
+	test_ft_read_err2(5);
+	test_ft_read(5);
+	test_ft_read(4);
+	test_ft_read(3);
 	return (0);
 }
