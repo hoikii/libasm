@@ -4,6 +4,8 @@
 ;
 ;	ft_strcpy(char *dst, const char *src)
 ;	{
+;		if (s == NULL)
+;			return dst;
 ;		int i = 0;
 ;		while (*(src + i) != 0)
 ;		{
@@ -29,8 +31,6 @@ loop:
 		je	done
 		inc	rax
 		jmp loop
-add_null:
-	mov		BYTE [rsi + rax], 0
 done:
 	mov		rax, rdi
 	ret

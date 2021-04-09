@@ -8,7 +8,7 @@ int		ft_strcmp(const char *s1, const char *s2);
 void	test_ft_strlen(char *s)
 {
 	if (s == NULL)
-		printf("NULL: %s --  %zu\n", "segfault", ft_strlen(s));
+		printf("%s: %s --  %zu\n", s, "segfault", ft_strlen(s));
 	else
 		printf("%s: %ld -- %zu\n", s, strlen(s), ft_strlen(s));
 	return ;
@@ -20,7 +20,7 @@ void	test_ft_strcpy(char *s)
 	char	dst_ori[10];
 
 	if (s == NULL)
-		printf("NULL: %s -- %s\n", "segfault", ft_strcpy(dst, s));
+		printf("%s: %s -- %s\n", s, "segfault", ft_strcpy(dst, s));
 	else
 		printf("%s -- %s\n", strcpy(dst_ori, s), ft_strcpy(dst, s));
 	return ;
@@ -56,8 +56,8 @@ int		main(void)
 	test_ft_strcmp("a", NULL);
 	test_ft_strcmp(NULL, "a");
 	test_ft_strcmp("", "");
-	test_ft_strcmp("abc", "abd");
-	test_ft_strcmp("abx", "abd");
+	test_ft_strcmp("abc", "abC");
+	test_ft_strcmp("abc", "abx");
 	test_ft_strcmp("xyz", "xyz");
 
 	return (0);
