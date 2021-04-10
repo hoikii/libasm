@@ -34,8 +34,8 @@ _ft_strcmp:
 loop:
 		mov	cl, BYTE [rdi + rax]
 		cmp	cl, BYTE [rsi + rax]
-		jg	greater
-		jl	less
+		ja	greater
+		jb	less
 		cmp	cl, 0
 		je	equal
 		inc	rax
@@ -55,12 +55,14 @@ less_null:
 	ret
 
 greater:
-	sub		cl, BYTE [rsi + rax]
-	movsx	rax, cl
+	movzx	rdx, BYTE [rsi + rax]
+	movzx	rax, cl
+	sub		rax, rdx
 	ret
 less:
-	sub	cl, BYTE [rsi + rax]
-	movsx	rax, cl
+	movzx	rdx, BYTE [rsi + rax]
+	movzx	rax, cl
+	sub		rax, rdx
 	ret
 equal:
 	mov	rax, 0
