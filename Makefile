@@ -1,5 +1,6 @@
 NAME		= libasm.a
-SRCS		= ft_strlen.s ft_strcpy.s ft_strcmp.s ft_read.s ft_write.s
+SRCS		= ft_strlen.s ft_strcpy.s ft_strcmp.s \
+			  ft_read.s ft_write.s ft_strdup.s
 ASM			= nasm
 ASMFLAG		= -fmacho64
 CC			= gcc
