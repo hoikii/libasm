@@ -8,6 +8,7 @@ size_t	ft_strlen(const char *s);
 char	*ft_strcpy(char *dst, const char *src);
 int		ft_strcmp(const char *s1, const char *s2);
 ssize_t	ft_read(int fd, void *buf, size_t nbyte);
+ssize_t	ft_write(int fd, void *buf, size_t nbyte);
 
 void	test_ft_strlen(char *s)
 {
@@ -41,68 +42,76 @@ void	test_ft_strcmp(char *s1, char *s2)
 	return ;
 }
 
-void	test_ft_read_err1(int bytes)
+void	test_ft_read_err(int fd, int bytes)
 {
 	int		result;
 	char	buf[100];
-	char	buf_ori[100];
+	char	buf_orig[100];
 
 	memset(buf, 0, sizeof(buf));
-	memset(buf_ori, 0, sizeof(buf_ori));
-	errno = 0;
-	result = read(-1, buf_ori, bytes);
-	printf("(result=%d)%s(errno=%d)\n", result, buf_ori, errno);
-	errno = 0;
-	result = ft_read(-1, buf, bytes);
-	printf("(result=%d)%s(errno=%d)\n", result, buf, errno);
-	return ;
-}
-
-void	test_ft_read_err2(int bytes)
-{
-	int		fd;
-	int		result;
-	char	buf[100];
-	char	buf_ori[100];
-
-	memset(buf, 0, sizeof(buf));
-	memset(buf_ori, 0, sizeof(buf_ori));
-	fd = open("main.c", O_RDONLY);
-	if (fd < 0)
-		return ;
+	memset(buf_orig, 0, sizeof(buf_orig));
 	errno = 0;
 	result = read(fd, NULL, bytes);
-	printf("(result=%d)%s(errno=%d)\n", result, buf_ori, errno);
+	printf("(result=%d)%s", result, buf_orig);
+	if (errno)
+		printf(" errno=%d, %s", errno, strerror(errno));
+	printf("\n");
 	errno = 0;
 	result = ft_read(fd, NULL, bytes);
-	printf("(result=%d)%s(errno=%d)\n", result, buf, errno);
+	printf("(result=%d)%s", result, buf);
+	if (errno)
+		printf(" errno=%d, %s", errno, strerror(errno));
+	printf("\n");
 	return ;
 }
 
-void	test_ft_read(int bytes)
+void	test_ft_read(int fd, int bytes)
 {
-	int		fd;
 	int		result;
 	char	buf[100];
-	char	buf_ori[100];
+	char	buf_orig[100];
 
 	memset(buf, 0, sizeof(buf));
-	memset(buf_ori, 0, sizeof(buf_ori));
-	fd = open("main.c", O_RDONLY);
-	if (fd < 0)
-		return ;
+	memset(buf_orig, 0, sizeof(buf_orig));
 	errno = 0;
-	result = read(fd, buf_ori, bytes);
-	printf("(result=%d)%s(errno=%d)\n", result, buf_ori, errno);
 	lseek(fd, 0, SEEK_SET);
+	result = read(fd, buf_orig, bytes);
+	printf("(result=%d)%s", result, buf_orig);
+	if (errno)
+		printf(" errno=%d, %s", errno, strerror(errno));
+	printf("\n");
 	errno = 0;
+	lseek(fd, 0, SEEK_SET);
 	result = read(fd, buf, bytes);
-	printf("(result=%d)%s(errno=%d)\n", result, buf, errno);
-	close(fd);
+	printf("(result=%d)%s", result, buf);
+	if (errno)
+		printf(" errno=%d, %s", errno, strerror(errno));
+	printf("\n");
 	return ;
 }
+void	test_ft_write(int fd, char *buf, int bytes)
+{
+	int	result;
+
+	errno = 0;
+	result = write(fd, buf, bytes);
+	printf(" -- result=%d", result);
+	if (errno)
+		printf(" errno=%d, %s", errno, strerror(errno));
+	printf("\n");
+	errno = 0;
+	result = ft_write(fd, buf, bytes);
+	printf(" -- result=%d", result);
+	if (errno)
+		printf(" errno=%d, %s", errno, strerror(errno));
+	printf("\n");
+	return ;
+}
+
 int		main(void)
 {
+	int		fd;
+
 	printf(">>> Starting libasm test <<<\n");
 	printf("\n===ft_strlen===\n");
 	test_ft_strlen(NULL);
@@ -125,10 +134,21 @@ int		main(void)
 	test_ft_strcmp("xyz", "xyz");
 
 	printf("\n===ft_read===\n");
-	test_ft_read_err1(5);
-	test_ft_read_err2(5);
-	test_ft_read(5);
-	test_ft_read(4);
-	test_ft_read(3);
+	fd = open("main.c", O_RDONLY);
+	if (fd < 0)
+		return (0);
+	test_ft_read(-1, 5);
+	test_ft_read_err(fd, 5);
+	test_ft_read(fd, -1);
+	test_ft_read(fd, 5);
+	test_ft_read(fd, 3);
+	close(fd);
+
+	printf("\n===ft_write===\n");
+	test_ft_write(-1, "sample test text", 10);
+	test_ft_write(1, "sample test text", -1);
+	test_ft_write(1, NULL, 10);
+	test_ft_write(1, "sample test text", 10);
+	test_ft_write(1, "sample test text", 5);
 	return (0);
 }
