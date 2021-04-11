@@ -15,7 +15,6 @@ TESTSRCS	= main.c \
 			  tester/test_ft_strdup.c
 RM			= rm -rf
 OBJS		= $(SRCS:.s=.o)
-TESTOBJS	= $(TESTSRCS:.c=.o)
 
 .PHONY: all bonus clean fclean re test
 
@@ -29,7 +28,7 @@ $(NAME): $(OBJS)
 	@echo "make done!"
 
 clean:
-	$(RM) $(OBJS) $(TESTOBJS)
+	$(RM) $(OBJS)
 
 fclean: clean
 	$(RM) $(NAME) $(TESTNAME)
