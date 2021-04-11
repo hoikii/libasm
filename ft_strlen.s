@@ -14,9 +14,9 @@ section .text
 	global _ft_strlen
 
 _ft_strlen:
-	mov	rax, 0						; i = 0
 	cmp	rdi, 0
 	je	done
+	mov	rax, 0						; i = 0
 loop:
 		cmp	BYTE [rdi + rax], 0		; *(str + i) == 0
 		je	done
