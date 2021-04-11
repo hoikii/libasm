@@ -1,31 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   test_ft_strcmp.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanlee <kanlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 19:28:53 by kanlee            #+#    #+#             */
-/*   Updated: 2021/04/11 21:09:45 by kanlee           ###   ########.fr       */
+/*   Updated: 2021/04/11 21:24:24 by kanlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tester/tester.h"
+#include "tester.h"
 
-int		main(void)
+static void	test(char *s1, char *s2)
 {
-	printf(">>> Starting libasm test <<<\n");
-	printf("\n===ft_strlen===\n");
-	test_ft_strlen();
-	printf("\n===ft_strcpy===\n");
-	test_ft_strcpy();
-	printf("\n===ft_strcmp===\n");
-	test_ft_strcmp();
-	printf("\n===ft_read===\n");
-	test_ft_read();
-	printf("\n===ft_write===\n");
-	test_ft_write();
-	printf("\n===ft_strdup===\n");
-	test_ft_strdup();
-	return (0);
+	if (s1 == NULL || s2 == NULL)
+		printf("cmp (%s,%s): %s -- %d\n",
+			s1, s2, "segfault", ft_strcmp(s1, s2));
+	else
+		printf("cmp (%s,%s): %d -- %d\n",
+			s1, s2, strcmp(s1, s2), ft_strcmp(s1, s2));
+	return ;
+}
+
+void		test_ft_strcmp(void)
+{
+	test(NULL, NULL);
+	test("a", NULL);
+	test(NULL, "a");
+	test("", "");
+	test("abc", "abC");
+	test("abc", "abx");
+	test("xyz", "xyz");
 }

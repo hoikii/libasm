@@ -6,8 +6,16 @@ ASMFLAG		= -fmacho64
 CC			= gcc
 CLFAGS		= -Wall -Wextra
 TESTNAME	= test
+TESTSRCS	= main.c \
+			  tester/test_ft_strlen.c \
+			  tester/test_ft_strcmp.c \
+			  tester/test_ft_strcpy.c \
+			  tester/test_ft_read.c \
+			  tester/test_ft_write.c \
+			  tester/test_ft_strdup.c
 RM			= rm -rf
 OBJS		= $(SRCS:.s=.o)
+TESTOBJS	= $(TESTSRCS:.c=.o)
 
 .PHONY: all bonus clean fclean re test
 
@@ -21,7 +29,7 @@ $(NAME): $(OBJS)
 	@echo "make done!"
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(TESTOBJS)
 
 fclean: clean
 	$(RM) $(NAME) $(TESTNAME)
@@ -29,5 +37,5 @@ fclean: clean
 re: fclean all
 
 test: all
-	$(CC) $(CLFAGS) -L. -lasm -o $(TESTNAME) main.c
+	$(CC) $(CLFAGS) -L. -lasm -o $(TESTNAME) $(TESTSRCS)
 	@./$(TESTNAME)
