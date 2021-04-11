@@ -13,8 +13,11 @@ _ft_strdup:
 	push	rdi				; backup arg
 	mov		rdi, rax		; set arg
 	call	_malloc
+	cmp		rax, 0
+	je		done
 	pop		rdi
 	mov		rsi, rdi
 	mov		rdi, rax
 	call	_ft_strcpy
+done:
 	ret

@@ -110,6 +110,28 @@ void	test_ft_write(int fd, char *buf, int bytes)
 	return ;
 }
 
+void	test_ft_strdup(char *s)
+{
+	char *dup;
+	char *dup_orig;
+
+	if (s != NULL)
+	{
+		dup = ft_strdup(s);
+		dup_orig = strdup(s);
+		printf("%s -- %s\n", dup_orig, dup);
+		free(dup);
+		free(dup_orig);
+	}
+	else
+	{
+		dup = ft_strdup(s);
+		printf("%s -- %s\n", "segfult", dup);
+		free(dup);
+	}
+	return ;
+}
+
 int		main(void)
 {
 	int		fd;
@@ -154,13 +176,9 @@ int		main(void)
 	test_ft_write(1, "sample test text", 5);
 
 	printf("\n===ft_strdup===\n");
-	char *s;
-	char *ss;
-	s = ft_strdup("ab");
-	ss = strdup("ab");
-	printf("%s -- %s\n", ss, s);
-	free(s);
-	free(ss);
+	test_ft_strdup("abcde");
+	test_ft_strdup("");
+	test_ft_strdup(NULL);
 
 	return (0);
 }
