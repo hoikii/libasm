@@ -16,7 +16,7 @@ TESTSRCS	= main.c \
 RM			= rm -rf
 OBJS		= $(SRCS:.s=.o)
 
-.PHONY: all bonus clean fclean re test
+.PHONY: all clean fclean re test
 
 all: $(NAME)
 
