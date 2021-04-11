@@ -6,7 +6,7 @@
 /*   By: kanlee <kanlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 19:28:53 by kanlee            #+#    #+#             */
-/*   Updated: 2021/04/11 21:25:22 by kanlee           ###   ########.fr       */
+/*   Updated: 2021/04/11 21:33:15 by kanlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void		test_ft_read(void)
 {
 	int	fd;
 
-	fd = open("main.c", O_RDONLY);
+	fd = open("MAKEFILE", O_RDONLY);
 	if (fd < 0)
 		return ;
 	test(-1, 5);
@@ -72,5 +72,6 @@ void		test_ft_read(void)
 	test(fd, -1);
 	test(fd, 5);
 	test(fd, 3);
+	test(1, 100);
 	close(fd);
 }
