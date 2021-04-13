@@ -1,13 +1,15 @@
-; function arguments are stored on rdi, rsi, rdx, ...
+; function arguments are stored in rdi, rsi, rdx, ...
+; ft_read(fd, buf, nbytes)  -->  rdi=fd,  rsi=buf,  rdx=nbytes
+; -------------------------------------------------------------
 
 section .text
 	global _ft_read
-	extern ___error
+	extern ___error					; external function to get address of errno
 
-_ft_read:			;ft_read(fd, buf, nbytes)  -->  rdi = fd, rsi = buf, rdx = nbytes
+_ft_read:
 	mov		rax, 0x02000003			; 0x2000000 (MacOS)+ 0x3 (system call for read)
-	syscall							; invoke system to do the read
-	jc		err
+	syscall
+	jc		err						; jump to err if Carry Flag is set
 	ret
 
 err:

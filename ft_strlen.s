@@ -1,3 +1,4 @@
+; function arguments are stored in rdi, rsi, rdx, ...
 ; ------------------------------------
 ;	size_t ft_strlen(const char *s)
 ;	{
@@ -14,7 +15,7 @@ section .text
 	global _ft_strlen
 
 _ft_strlen:
-	cmp	rdi, 0
+	cmp	rdi, 0						; return if arg is NULL
 	je	done
 	mov	rax, 0						; i = 0
 loop:

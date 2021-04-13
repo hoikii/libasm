@@ -1,4 +1,7 @@
-
+; function arguments are stored in rdi, rsi, rdx, ...
+; We will use cl as temporary register, so backup its contents first
+; then restore it at end.
+; 
 ; -----------------------------------------------------
 ; function arguments are stored on rdi, rsi, rdx, ...
 ;
@@ -31,10 +34,11 @@ _ft_strcmp:
 	cmp	rsi, 0
 	je	chk_null
 	mov	rax, 0
+	push	cx
 loop:
 		mov	cl, BYTE [rdi + rax]
 		cmp	cl, BYTE [rsi + rax]
-		ja	greater
+		ja	greater							; use unsigned compare
 		jb	less
 		cmp	cl, 0
 		je	equal
@@ -46,24 +50,30 @@ chk_null:
 	jne	greater_null
 	cmp	rsi, 0
 	jne	less_null
-	jmp	equal
+	jmp	equal_null
 greater_null:
 	mov	rax, 1
 	ret
 less_null:
 	mov	rax, -1
 	ret
+equal_null:
+	mov	rax, 0
+	ret
 
 greater:
+	movzx	rax, cl							; copy and fill target operand with zero
 	movzx	rdx, BYTE [rsi + rax]
-	movzx	rax, cl
 	sub		rax, rdx
+	pop		cx
 	ret
 less:
-	movzx	rdx, BYTE [rsi + rax]
 	movzx	rax, cl
+	movzx	rdx, BYTE [rsi + rax]
 	sub		rax, rdx
+	pop		cx
 	ret
 equal:
 	mov	rax, 0
+	pop	cx
 	ret

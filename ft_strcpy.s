@@ -1,18 +1,20 @@
+; function arguments are stored in rdi, rsi, rdx, ...
+; We will use cl as temporary register, so backup its contents first
+; then restore it at end.
 ; -----------------------------------------------------
-; function arguments are stored on rdi, rsi, rdx, ...
-; ft_strcpy(*dst, *src) --> rdi = dst, rsi = src
 ;
 ;	ft_strcpy(char *dst, const char *src)
 ;	{
-;		if (s == NULL)
+;		if (src == NULL)
 ;			return dst;
 ;		int i = 0;
-;		while (*(src + i) != 0)
+;		while (true)
 ;		{
 ;			*(dst + i) = *(src + i);
+;			if ( *(dst + i) == '\0' )
+;				break ;
 ;			i++;
 ;		}
-;		*(dst + i) = '\0';
 ;		return dst;
 ;	}
 ; ------------------------------------------------------
@@ -21,16 +23,18 @@ section .text
 	global _ft_strcpy
 
 _ft_strcpy:
-	cmp	rsi, 0
+	push cx								; backup temporary register
+	cmp	rsi, 0							; return if src==NULL
 	je	done
 	mov	rax, 0
 loop:
-		mov cl, BYTE [rsi + rax]
+		mov cl, BYTE [rsi + rax]		; memory-memory operation is impossile
 		mov	BYTE [rdi + rax], cl
 		cmp	cl, 0
 		je	done
 		inc	rax
 		jmp loop
 done:
-	mov		rax, rdi
+	mov	rax, rdi
+	pop	cx								; restore temporary register
 	ret
