@@ -1,4 +1,5 @@
-; function arguments are stored in rdi, rsi, rdx, ...
+; By calling convention, parameters are passed through rdi, rsi, rdx, rcx, ...
+; rax is used for return value.
 ; ------------------------------------
 ;	size_t ft_strlen(const char *s)
 ;	{

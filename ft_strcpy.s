@@ -1,6 +1,7 @@
-; function arguments are stored in rdi, rsi, rdx, ...
-; We will use cl as temporary register, so backup its contents first
-; then restore it at end.
+; By calling convention, parameters are passed through rdi, rsi, rdx, rcx, ...
+; rax is used for return value.
+; By calling convention, cx is caller saved register so we can use it as
+; temporary variable.
 ; -----------------------------------------------------
 ;
 ;	ft_strcpy(char *dst, const char *src)
@@ -23,7 +24,6 @@ section .text
 	global _ft_strcpy
 
 _ft_strcpy:
-	push cx								; backup temporary register
 	cmp	rsi, 0							; return if src==NULL
 	je	done
 	mov	rax, 0
@@ -36,5 +36,4 @@ loop:
 		jmp loop
 done:
 	mov	rax, rdi
-	pop	cx								; restore temporary register
 	ret
