@@ -1,9 +1,8 @@
-; function arguments are stored in rdi, rsi, rdx, ...
-; We will use cl as temporary register, so backup its contents first
-; then restore it at end.
-; 
+; By calling convention, parameters are passed through rdi, rsi, rdx, rcx, ...
+; rax is used for return value.
+; By calling convention, cx and dx is caller saved register so we can use it as
+; temporary variable.
 ; -----------------------------------------------------
-; function arguments are stored on rdi, rsi, rdx, ...
 ;
 ;	ft_strcmp(const char *s1, const char *s2)
 ;	{
@@ -34,12 +33,10 @@ _ft_strcmp:
 	cmp	rsi, 0
 	je	chk_null
 	mov	rax, 0
-	push	cx
 loop:
-		mov	cl, BYTE [rdi + rax]
+		mov	cl, BYTE [rdi + rax]		; memory-to-memory operation is impossile
 		cmp	cl, BYTE [rsi + rax]
-		ja	greater							; use unsigned compare
-		jb	less
+		jne	differ
 		cmp	cl, 0
 		je	equal
 		inc	rax
@@ -50,30 +47,19 @@ chk_null:
 	jne	greater_null
 	cmp	rsi, 0
 	jne	less_null
-	jmp	equal_null
+	jmp	equal
 greater_null:
 	mov	rax, 1
 	ret
 less_null:
 	mov	rax, -1
 	ret
-equal_null:
-	mov	rax, 0
-	ret
 
-greater:
-	movzx	rax, cl							; copy and fill target operand with zero
-	movzx	rdx, BYTE [rsi + rax]
-	sub		rax, rdx
-	pop		cx
-	ret
-less:
-	movzx	rax, cl
-	movzx	rdx, BYTE [rsi + rax]
-	sub		rax, rdx
-	pop		cx
+differ:
+	movzx	edx, BYTE [rsi + rax]			; copy and fill target operand with zero
+	movzx	eax, cl
+	sub		eax, edx						; return 32bit register
 	ret
 equal:
-	mov	rax, 0
-	pop	cx
+	mov eax, 0
 	ret

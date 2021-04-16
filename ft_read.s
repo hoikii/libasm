@@ -1,4 +1,5 @@
-; function arguments are stored in rdi, rsi, rdx, ...
+; By calling convention, parameters are passed through rdi, rsi, rdx, rcx, ...
+; rax is used for return value.
 ; ft_read(fd, buf, nbytes)  -->  rdi=fd,  rsi=buf,  rdx=nbytes
 ; -------------------------------------------------------------
 
@@ -13,8 +14,9 @@ _ft_read:
 	ret
 
 err:
-	push	rax
-	call	___error
-	pop		QWORD [rax]
+	push	rax						; backup error code
+	call	___error				; rax <-- address of errno
+	pop		rcx
+	mov		[rax], rcx
 	mov		rax, -1
 	ret
